@@ -20,9 +20,11 @@ def active_connection(target_ip, target_port):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((target_ip, target_port))
         while True:
-            s.send(b"Malicious traffic\n")
+            # Increase the amount of data sent
+            s.send(b"Malicious traffic\n" * 1000)
             data = s.recv(1024)
-            time.sleep(1)
+            # Reduce sleep time to send data more frequently
+            time.sleep(0.1)
     except Exception as e:
         print(f"Active connection error: {e}")
     finally:

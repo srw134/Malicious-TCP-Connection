@@ -9,7 +9,7 @@ def handle_client(client_socket, client_address):
             data = client_socket.recv(1024)
             if not data:
                 break
-            print(f"Received data from {client_address}: {data}")
+            #print(f"Received data from {client_address}: {data}")
             client_socket.send(b"ACK\n")
     except Exception as e:
         print(f"Connection error: {e}")
