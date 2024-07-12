@@ -2,7 +2,7 @@ import socket
 import threading
 import time
 import random
-import sys
+import argparse
 
 def idle_connection(target_ip, target_port):
     try:
@@ -37,45 +37,19 @@ def create_malicious_connections(target_ip, target_port, num_idle=2, num_active=
         thread = threading.Thread(target=active_connection, args=(target_ip, target_port))
         thread.start()
 
-def input_with_timeout(prompt, timeout, default):
-    print(prompt, end=': ', flush=True)
-    result = []
-    def timeout_input():
-        try:
-            result.append(input())
-        except:
-            pass
-
-    thread = threading.Thread(target=timeout_input)
-    thread.daemon = True
-    thread.start()
-    thread.join(timeout)
-
-    if result:
-        return result[0]
-    else:
-        print(f"\nTimeout reached. Using default value: {default}")
-        return default
-
 if __name__ == "__main__":
-    target_ip = input_with_timeout("Enter target IP", 5, "127.0.0.1")
-    
-    try:
-        target_port = int(input_with_timeout("Enter target port", 5, random.randint(10000, 10500)))
-    except ValueError:
-        target_port = random.randint(10000, 10500)
-        print(f"Invalid input for port. Using random value: {target_port}")
+    parser = argparse.ArgumentParser(description='Create malicious connections to a target IP and port.')
+    parser.add_argument('--ip', type=str, default="127.0.0.1", help='Target IP address (default: 127.0.0.1)')
+    parser.add_argument('--port', type=int, default=random.randint(1024, 65535), help='Target port (default: random valid port)')
+    parser.add_argument('--idle', type=int, default=1, help='Number of idle connections (default: 1)')
+    parser.add_argument('--active', type=int, default=1, help='Number of active connections (default: 1)')
 
-    try:
-        num_idle = int(input_with_timeout("Enter number of idle connections", 5, 1))
-    except ValueError:
-        num_idle = 1
-        print("Invalid input for number of idle connections. Using default value: 1")
+    args = parser.parse_args()
 
-    try:
-        num_active = int(input_with_timeout("Enter number of active connections", 5, 1))
-    except ValueError:
-        num_active = 1
-        print("Invalid input for number of active connections. Using default value: 1")
+    target_ip = args.ip
+    target_port = args.port
+    num_idle = args.idle
+    num_active = args.active
 
     create_malicious_connections(target_ip, target_port, num_idle, num_active)
+
